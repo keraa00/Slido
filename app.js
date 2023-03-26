@@ -44,8 +44,7 @@ app.use('/publika', publikaRouter);
 
 
 var pg = require('pg');
-//const initializePredavac = require('./passportConfig');
-//initializePredavac(passport);
+
 
 var config = require('./dbConfig');
 
