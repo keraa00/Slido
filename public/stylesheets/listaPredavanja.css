@@ -1,0 +1,10 @@
+html, .navigacija, #pozadina{
+    background:linear-gradient(to right, #241E92, #5432D3, #7B6CF6,#E5A5FF);
+    color: black;
+
+}
+
+#tabelaPredavanja, .spisak{
+    color: black;
+}
+

@@ -1,0 +1,34 @@
+.container-fluid{
+    margin-bottom: 0px;
+
+}
+
+
+
+.uredi{
+    width: 360px;
+    padding: 3% 0 0;
+    margin: auto;
+}
+
+input {
+    text-align: center;
+}
+#login-forma {
+    border-radius: 25px;
+    position: relative;
+    z-index: 1;
+    background: #FFFFFF;
+    max-width: 360px;
+    margin: 0 auto 100px;
+    padding: 45px;
+    text-align: center;
+    box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.2), 0 5px 5px 0 rgba(0, 0, 0, 0.24);
+
+}
+
+html, .navigacija{
+    background:linear-gradient(to right, #241E92, #5432D3, #7B6CF6,#E5A5FF);
+    color: black;
+}
+

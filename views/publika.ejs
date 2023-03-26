@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <title><%= title %></title>
+  <link rel='stylesheet' href='/stylesheets/style.css' />
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="">Slido</a>
+        </div>
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="">Slido</a></li>
+            <li><a href="/admin/login">Admin</a></li>
+            <li><a href="/predavac/login">Predavac</a></li>
+            <li><a href="/publika">Publika</a></li>
+
+        </ul>
+    </div>
+</nav>
+<h1><%= title %></h1>
+
+<div>
+  <%for (let i =0; i<publika.length; i++) {%>
+
+    <p><%= publika[i].predavac_id%></p>
+    <p><%= publika[i].ime%></p>
+    <p><%= publika[i].prezime%></p>
+
+
+
+  <%}%>
+</div>
+
+
+
+</body>
+</html>

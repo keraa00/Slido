@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href='/stylesheets/chat-ulaz.css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+  <title>Publika</title>
+</head>
+<body id="pozadina">
+
+
+
+<ul class="navigacija">
+  <li><a class="active" href="http://localhost:3000">Home</a></li>
+  <li><a href="/admin">Admin</a></li>
+  <li><a href="/predavac">Predavac</a></li>
+  <li><a href="/publika">Publika</a></li>
+
+    <i id="check" class="fas fa-moon" style="font-size: 35px;float: right; color:white;margin-right:25px;margin-top:7px; cursor: pointer" onclick="changeStatus()"></i>
+
+
+</ul>
+
+
+<div class="join-container">
+  <header class="join-header">
+    <h1><i class="fas fa-book"></i> Pridruzi se Predavanju</h1>
+  </header>
+  <main class="join-main">
+    <form action="/publika/chat" method="post">
+
+      <div class="form-control">
+        <label for="room">Kod Predavanja</label>
+        <input type="text" name="room" id="room" placeholder="Unesite kod predavanja">
+      </div>
+      <button type="submit" class="btn">Join Predavanje</button>
+    </form>
+  </main>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.11.0/qs.js" integrity="sha512-QXQgo/rJDUE26PrRHxhISwratdyZi9e/zvnlv72Mk6W3lmTa5YiiVaR9cYxNRjQIZXzAShwslz6rkOttv90g6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.11.0/qs.min.js" integrity="sha512-/l6vieC+YxaZywUhmqs++8uF9DeMvJE61ua5g+UK0TuHZ4TkTgB1Gm1n0NiA86uEOM9JJ6JUwyR0hboKO0fCng==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  const check =document.getElementById("check")
+
+
+  if (localStorage.getItem('darkMode')===null){
+    localStorage.setItem('darkMode', "false");
+  }
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  document.getElementsByTagName('HEAD')[0].appendChild(link);
+
+
+  checkStatus()
+  function checkStatus(){
+    if (localStorage.getItem('darkMode')==="true"){
+      check.checked = true;
+      link.href = '/stylesheets/dark.css';
+    }else{
+      check.checked = false;
+      link.href = '';
+    }
+  }
+
+  function changeStatus(){
+
+    if (localStorage.getItem('darkMode')==="true"){
+      localStorage.setItem('darkMode', "false");
+      link.href = '';
+    } else{
+      localStorage.setItem('darkMode', "true");
+      link.href = '/stylesheets/dark.css';
+    }
+  }
+
+</script>
+</body>
+</html>

@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/index.css' />
+  </head>
+  <body>
+
+
+  <ul class="navigacija">
+    <li><a class="active" href="http://localhost:3000">Home</a></li>
+    <li><a href="/admin">Admin</a></li>
+    <li><a href="/predavac">Predavac</a></li>
+    <li><a href="/publika">Publika</a></li>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li ><a href="/predavac/registracija"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li style="margin-right: 15px;"><a href="/predavac/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      <i id="check" class="fas fa-moon" style="font-size: 35px; color:white;margin-right:25px;margin-top:7px; cursor: pointer" onclick="changeStatus()"></i>
+
+    </ul>
+  </ul>
+
+
+
+
+  <div class="title">
+    <div class="text1">
+     WELCOME TO SLIDO
+    </div>
+    <div class="text2">
+      <div class="dropdown-content">
+        Pristupate kao?
+        <a href="/admin" class="ulaz"><i class="fa-solid fa-circle-arrow-right"></i><strong>Admin</strong></a>
+        <a href="/predavac" class="ulaz"><i class="fa-solid fa-circle-arrow-right"></i><strong>Predavac</strong></a>
+        <a href="/publika" class="ulaz"><i class="fa-solid fa-circle-arrow-right"></i><strong>Publika</strong></a>
+      </div>
+    </div>
+  </div> <br><br><br>
+      <div id="detect"></div>
+      <div class="wrapper">
+        <div class="content">
+          <div class="warn-icon">
+            <span class="icon"><i class="fas fa-exclamation"></i></span>
+          </div>
+          <h2>AdBlok detektovan!</h2>
+          <p style="color: black">Molimo Vas iskljucite vas AdBlocker za pristup stranici</p>
+          <div class="btn">
+            <div class="bg-layer"></div>
+            <button>Okej</button>
+          </div>
+        </div>
+      </div></div>
+
+
+
+
+
+      <script>
+        const check =document.getElementById("check")
+
+
+        if (localStorage.getItem('darkMode')===null){
+          localStorage.setItem('darkMode', "false");
+        }
+        const link = document.createElement('link');
+        link.rel = 'stylesheet';
+        document.getElementsByTagName('HEAD')[0].appendChild(link);
+
+        checkStatus()
+        function checkStatus(){
+          if (localStorage.getItem('darkMode')==="true"){
+            check.checked = true;
+            link.href = './stylesheets/dark.css';
+          }else{
+            check.checked = false;
+            link.href = '';
+          }
+        }
+
+        function changeStatus(){
+
+          if (localStorage.getItem('darkMode')==="true"){
+            localStorage.setItem('darkMode', "false");
+            link.href = '';
+          } else{
+            localStorage.setItem('darkMode', "true");
+            link.href = './stylesheets/dark.css';
+          }
+        }
+      </script>
+
+      <script>
+        const detect = document.querySelector("#detect");
+        const wrapper = document.querySelector(".wrapper");
+        const button = wrapper.querySelector("button");
+
+        let adClasses = ["ad", "ads", "adsbox", "doubleclick", "ad-placement", "ad-placeholder", "adbadge", "BannerAd"];
+        for(let item of adClasses){
+          detect.classList.add(item);
+        }
+        let getProperty = window.getComputedStyle(detect).getPropertyValue("display");
+        if(!wrapper.classList.contains("show")){
+          getProperty == "none" ? wrapper.classList.add("show") : wrapper.classList.remove("show");
+        }
+        button.addEventListener("click", ()=>{
+          wrapper.classList.remove("show");
+        });
+      </script>
+  </body>
+
+</html>

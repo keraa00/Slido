@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/listaPredavanja.css' />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+  <style>
+    .navigacija {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    li {
+      float: left;
+    }
+
+    .navigacija li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    /* Change the link color to #111 (black) on hover */
+    .navigacija li a:hover {
+      background-color: #111;
+      text-decoration: none;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      background: var(--light-color);
+      margin: 00px;
+    }
+
+  </style>
+
+  <ul class="navigacija">
+    <li><a class="active" href="http://localhost:3000">Home</a></li>
+    <li><a href="/admin">Admin</a></li>
+    <li><a href="/predavac">Predavac</a></li>
+    <li><a href="/publika">Publika</a></li>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li style="margin-right: 15px;"><a href="/predavac/logout"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+      <i id="check" class="fas fa-moon" style="font-size: 35px; color:white;margin-right:25px;margin-top:7px; cursor: pointer" onclick="changeStatus()"></i>
+
+    </ul>
+  </ul>
+
+
+  <!--      LISTA PREDAVANJA   -->
+  <div class="row">
+    <div class="col-md-8" style="width: 800px;">
+      <div class="tabelaPredavanja data" style="padding: 10px; margin: 20px">
+        <h2 class="spisak" style="">Spisak svih predavanja</h2>
+        <table class="table table-bordered" id="tabelaPredavanja" style="display: block">
+          <thead>
+          <tr>
+            <th scope="col" >Ime predavanja</th>
+            <th scope="col">Pocetak predavanja</th>
+            <th scope="col">Kraj predavanja</th>
+            <th scope="col">Kod predavanja</th>
+            <th scope="col">Uredi predavanje</th>
+            <th scope="col">Obrisi predavanje</th>
+
+          </tr>
+          </thead>
+          <tbody><%let pocetak = []; let kraj = []%>
+          <%for(let i=0;i<p.length;i++){%>
+          <%pocetak.push((p[i].pocetak_predavanja).toString())%>
+          <%kraj.push((p[i].kraj_predavanja).toString())%>
+          <%}%>
+          <% for(let i=0; i<p.length; i++) { %>
+          <tr style="font-weight: bold">
+
+            <td><form action=/predavac/dashboard/listaPredavanja/<%= Number.parseInt(p[i].predavanje_id) %> method="post">
+                <button class="btn btn-success" id="b" value="<%= p[i].predavanje_id %>" style="width: 150px;"><%=  p[i].ime_predavanja%></button>
+                <input type="text" value="<%=p[0].kod_predavanja%>" hidden="hidden" name="kod">
+              </form></td>
+            <td><%=pocetak[i].slice(0,21)%></td>
+            <td><%=kraj[i].slice(0,21)%></td>
+            <td><%=p[i].kod_predavanja%></td>
+            <form action="/predavac/urediPredavanje" method="post">
+              <input hidden="hidden" name="urediPred" value="<%=p[i].predavanje_id%>">
+              <td style="text-align: center"><input type="submit" class="btn btn-primary" value="Uredi"></td>
+            </form>
+            <form action="/predavac/obrisiPredavanje" method="post">
+              <input hidden="hidden" name="obrisiPred" value="<%=p[i].predavanje_id%>">
+              <td style="text-align: center"><input type="submit" class="btn btn-danger" value="Obriši"></td>
+            </form>
+          </tr>
+          <% } %>
+          </tbody>
+        </table>
+
+      </div></div></div>
+
+  <script>
+    function prikaziPredavace() {
+      var x = document.getElementById("tabelaPredavaci");
+      var dugme = document.getElementById("dugmePredavaci");
+      if (x.style.display === "none") {
+        x.style.display = "block";
+        dugme.innerText = 'Sakrij';
+      } else {
+        x.style.display = "none";
+        dugme.innerText = 'Prikaži';
+      }
+    }
+  </script>
+  <script>
+
+    const check =document.getElementById("check")
+
+
+    if (localStorage.getItem('darkMode')===null){
+      localStorage.setItem('darkMode', "false");
+    }
+    const link = document.createElement('link');
+    link.rel = 'stylesheet';
+    document.getElementsByTagName('HEAD')[0].appendChild(link);
+
+    checkStatus()
+    function checkStatus(){
+      if (localStorage.getItem('darkMode')==="true"){
+        check.checked = true;
+        link.href = '/stylesheets/dark.css';
+      }else{
+        check.checked = false;
+        link.href = '';
+      }
+    }
+
+    function changeStatus(){
+
+      if (localStorage.getItem('darkMode')==="true"){
+        localStorage.setItem('darkMode', "false");
+        link.href = '';
+      } else{
+        localStorage.setItem('darkMode', "true");
+        link.href = '/stylesheets/dark.css';
+      }
+    }
+  </script>
+  <script>
+    let fired_button;
+    $("button").click(function() {
+       fired_button = $(this).val();
+      //alert(fired_button);
+
+    });
+
+  </script>
+
+  </body>
+</html>

@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+  <!-- jQuery library -->
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css"/>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
+  <title>Kod</title>
+  <link rel='stylesheet' href='/stylesheets/kod.css'>
+</head>
+<body id="pozadina">
+<style>
+    .navigacija {
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        overflow: hidden;
+        background-color: #333;
+    }
+
+    .navigacija li {
+        float: left;
+    }
+
+    .navigacija li a {
+        display: block;
+        color: white;
+        text-align: center;
+        padding: 14px 16px;
+        text-decoration: none;
+    }
+
+    /* Change the link color to #111 (black) on hover */
+    .navigacija li a:hover {
+        background-color: #111;
+        text-decoration: none;
+    }
+    body {
+        font-family: 'Roboto', sans-serif;
+        font-size: 16px;
+        background: var(--light-color);
+        margin: 00px;
+    }
+
+</style>
+<ul class="navigacija">
+    <li><a class="active" href="http://localhost:3000">Home</a></li>
+    <li><a href="/admin">Admin</a></li>
+    <li><a href="/predavac">Predavac</a></li>
+    <li><a href="/publika">Publika</a></li>
+
+    <ul class="nav navbar-nav navbar-right">
+        <li style="margin-right: 15px;"><a href="/predavac/logout"><span class="glyphicon glyphicon-log-out"></span> Log Out</a></li>
+        <i id="check" class="fas fa-moon" style="font-size: 35px; color:white;margin-right:25px;margin-top:7px; cursor: pointer" onclick="changeStatus()"></i>
+
+    </ul>
+</ul>
+<div class="container spisak">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-6">
+            <h1>Kod za predavanje '<u><%= p[0].ime_predavanja%>'</u></h1>
+            <h1 style="font-size: 130px;"><strong>#<%=p[0].kod_predavanja %></strong></h1> <br>
+            <h3>Zelite li podijeliti ovaj kod gostima na mail?</h3>
+
+        </div>
+    </div>
+</div>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4"></div>
+        <div class="col-md-2"></div>
+        <div class="col-md-4">
+
+
+
+            <button id="myBtn" aria-controls="events-create-menu" cdkoverlayorigin="" data-cy="events-create-dropdown-button" id="events-create-button" type="button" class="ecd__button" aria-haspopup="false"><svg width="20" height="20" viewBox="0 0 20 20" class="icon-size20 f-white mr4"><path d="M10.0026 15.8333C9.54295 15.8333 9.17171 15.4621 9.17171 15.0024V10.8283H4.9976C4.53798 10.8283 4.16675 10.4571 4.16675 9.99748C4.1665 9.77705 4.25396 9.56557 4.40983 9.4097C4.56569 9.25383 4.77717 9.16638 4.9976 9.16663H9.17171V4.99748C9.17147 4.77705 9.25892 4.56557 9.41479 4.4097C9.57066 4.25383 9.78213 4.16638 10.0026 4.16663C10.4622 4.16663 10.8334 4.53786 10.8334 4.99748V9.16663H15.0026C15.4622 9.16663 15.8334 9.53786 15.8334 9.99748C15.8334 10.4571 15.4622 10.8283 15.0026 10.8283H10.8334V15.0024C10.8334 15.4503 10.4563 15.8274 10.0026 15.8333Z"></path></svg><div class="mx2 font-size14 fw-500 ng-star-inserted">New Mail</div><!----><!----></button>
+            <div id="myModal" class="modal">
+                <!-- Modal content -->
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <span class="close">&times;</span>
+                        <h1><strong>New Mail</strong></h1>
+                    </div>
+                    <div class="modal-body">
+
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-md-4"></div>
+                                <div class="col-md-5">
+                                    <%for(let i=0;i<p.length;i++) {%>
+                                    <form action="/predavac/dashboard/listaPredavanja/<%= Number.parseInt(p[i].predavanje_id) %>/kod" method="post">
+                                        <div>
+                                            <div>
+                                                <h3><strong>Unesite mail adresu</strong></h3>
+                                                <input type="email"  placeholder="email:"  id="mailAdresa" name="mailAdresa" required>
+                                                <p id="tekst"></p>
+                                            </div> <br>
+
+
+
+
+                                </div>
+
+                            </div>
+
+
+
+
+
+                        </div>
+
+                    </div>
+                    <div class="modal-footer">
+                        <h3><button type="submit" class="btn btn-primary" >Posalji</button></h3>
+                        </form>
+                        <% }%>
+
+                    </div>
+
+
+                </div>
+
+            </div>
+
+
+
+
+
+
+                <script>
+                    const check =document.getElementById("check")
+
+                    //If darkMode doesn’t exist in the LocalStorage, create it. False by default
+                    if (localStorage.getItem('darkMode')===null){
+                        localStorage.setItem('darkMode', "false");
+                    }
+                    const link = document.createElement('link');
+                    link.rel = 'stylesheet';
+                    document.getElementsByTagName('HEAD')[0].appendChild(link);
+                    //checkStatus is only called one time in the program, when you reload the page
+                    //It gives the page it's default look, depening on waht darkMode is set to
+                    checkStatus()
+                    function checkStatus(){
+                        if (localStorage.getItem('darkMode')==="true"){
+                            check.checked = true;
+                            link.href = '/stylesheets/dark.css';
+                        }else{
+                            check.checked = false;
+                            link.href = '';
+                        }
+                    }
+
+                    function changeStatus(){
+
+                        if (localStorage.getItem('darkMode')==="true"){
+                            localStorage.setItem('darkMode', "false");
+                            link.href = '';
+                        } else{
+                            localStorage.setItem('darkMode', "true");
+                            link.href = '/stylesheets/dark.css';
+                        }
+                    }
+                </script>
+
+
+
+                    <script>
+
+
+
+
+
+                        var modal = document.getElementById("myModal");
+
+
+                        var btn = document.getElementById("myBtn");
+
+
+                        var span = document.getElementsByClassName("close")[0];
+
+
+                        btn.onclick = function() {
+                            modal.style.display = "block";
+                        }
+
+
+                        span.onclick = function() {
+                            modal.style.display = "none";
+                        }
+
+
+                        window.onclick = function(event) {
+                            if (event.target == modal) {
+                                modal.style.display = "none";
+                            }
+                        }
+
+                        function novoPredavanje(){
+                            console.info("ffff");
+                        }
+                        function noviMail(){
+                            const btn = document.getElementById('dugme');
+                            const someHeader = document.getElementById('tekst');
+
+                            btn.addEventListener('click', function() {
+                                someHeader.innerText="Your Custom Text Here";
+                            });
+                        }
+
+                    </script>
+</body>
+</html>

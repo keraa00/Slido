@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href='/stylesheets/chat-publika.css'>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.12.1/css/all.min.css" integrity="sha256-mmgLkCYLUQbXn0B1SRqzHar6dCnv9oZFPEC1g1cwlkk=" crossorigin="anonymous" />
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+  <!-- Latest compiled JavaScript -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+  <title><%=p[0].ime_predavanja%></title>
+
+</head>
+<body <% if(p[0].slika){%> style="background-image: url('/upload/<%=p[0].slika%>');" <%}%>>
+
+
+<ul>
+  <li><a class="active" href="http://localhost:3000">Home</a></li>
+  <li><a href="/admin">Admin</a></li>
+  <li><a href="/predavac">Predavac</a></li>
+  <li><a href="/publika">Publika</a></li>
+
+</ul>
+<div class="chat-container">
+  <header class="chat-header">
+    <h1><i class="fas fa-book"></i> Predavanje</h1>
+    <div>
+
+      <form action="/publika/chat" method="POST">
+        <label for="kera" style="cursor:pointer; color: #003cff;"><h6>Sortiraj pitanja po </h6></label>
+        <input type="submit" name="kera"  id="kera" hidden="hidden" value="<%=p[0].kod_predavanja%>">
+        <select class="sort" name="sort">
+          <option name="" value="0" selected>Izaberite sort</option>
+          <option name="table1" value="1">Datumu (od najstarijeg)</option>
+          <option name="table2" value="2">Datumu (od najmladjeg)</option>
+          <option name="table3" value="3">Lajkovima</option>
+        </select>
+
+      </form>
+
+
+    </div>
+    <a href="/publika" class="btn btn-success" >Napusti Predavanje</a>
+
+  </header>
+  <main class="chat-main">
+    <div class="chat-sidebar">
+      <h3><i class="fas fa-comments"></i> Ime Predavanja: </h3>
+      <h2 id="room-name" name="room"><%= p[0].ime_predavanja%></h2>
+
+    </div>
+    <div class="chat-messages">
+
+
+      <p hidden="hidden" id="paragraph" name="paragraph" value="<%=p[0].kod_predavanja%>"><%=p[0].kod_predavanja%></p>
+      <p hidden="hidden" id="paragraph2" name="paragraph2" value="<%=p[0].predavanje_id%>"><%=p[0].predavanje_id%></p>
+
+        <%let brojac = 0;%>
+      <%for(let i=0; i<pitanja.length; i++){%>
+      <div class="message">
+        <p class="meta">Anonymous <span> <%=pitanja[i].time%></span></p>
+        <span style="float:right; font-size: 16px; " id="likes-count-<%=pitanja[i].pitanje_id%>"><%if(pitanja[i].likes > 0){%>
+          <%=pitanja[i].likes %>
+          <%}%></span>
+
+          <button  class="fa fa-thumbs-up" onclick="lajkanje(event);"
+                data-post-id="<%=pitanja[i].pitanje_id%>" style="float: right;font-size: 16px; color:var(--dark-color-a); " value="<%=pitanja[i].pitanje_id%>">Like
+        </button>
+        <p class="text">
+          <%= pitanja[i].pitanje%>
+    <%brojac++;%>
+        </p>
+      </div>
+      <%} %>
+
+        <input type="text" hidden="hidden" id="paragraph" name="paragraph" value="<%=p[0].kod_predavanja%>">
+
+
+    </div>
+  </main>
+  <div class="chat-form-container">
+    <form id="chat-form">
+      <input
+              id="msg"
+              type="text"
+              placeholder="Enter Message"
+              required
+              autocomplete="off"
+      />
+      <button class="btn" ><i class="fas fa-paper-plane"></i> Send</button>
+    </form>
+  </div>
+</div>
+
+
+<!-- RATING -->
+
+<div class="container" id="a">
+  <div class="post">
+    <div class="text">Hvala Vam sto ste ocijenili predavanje!</div>
+    <div class="edit">EDIT</div>
+  </div>
+  <div class="star-widget">
+    <input type="radio" name="rate" id="rate-5">
+    <label for="rate-5" class="fas fa-star"></label>
+    <input type="radio" name="rate" id="rate-4">
+    <label for="rate-4" class="fas fa-star"></label>
+    <input type="radio" name="rate" id="rate-3">
+    <label for="rate-3" class="fas fa-star"></label>
+    <input type="radio" name="rate" id="rate-2">
+    <label for="rate-2" class="fas fa-star"></label>
+    <input type="radio" name="rate" id="rate-1">
+    <label for="rate-1" class="fas fa-star"></label>
+    <form  id="forma">
+      <header></header>
+      <div class="textarea">
+        <textarea cols="30" placeholder="Napisite nam vase iskustvo.." id="tekst" ></textarea>
+      </div>
+      <div class="btn">
+        <button  onclick="rating(<%=p[0].kod_predavanja%>)" id="dugme" value="<%=p[0].kod_predavanja%>">Post</button>
+      </div>
+    </form>
+  </div>
+</div>
+<%let lista_zabranjenih = []; %>
+<%for(let i=0;i<zabranjena.length;i++){%>
+  <%lista_zabranjenih.push(zabranjena[i].rijec)%>
+<%}%>
+
+<input type="text" hidden="hidden" value="<%=lista_zabranjenih%>" id="lista">
+<input type="text" hidden="hidden" value="<%=p[0].predavanje_id%>" id="id">
+
+<script>
+
+  function fja(kod){
+    let a = {
+      kljuc: kod
+    }
+    $.post('/publika/sortirajDatum', a);
+  }
+</script>
+
+<script>
+  const btn = document.querySelector("#dugme");
+  const post = document.querySelector(".post");
+  const widget = document.querySelector(".star-widget");
+  const editBtn = document.querySelector(".edit");
+  btn.onclick = ()=>{
+
+    const cb1 = document.querySelector('#rate-1');
+    const cb2= document.querySelector('#rate-2');
+    const cb3 = document.querySelector('#rate-3');
+    const cb4 = document.querySelector('#rate-4');
+    const cb5 = document.querySelector('#rate-5');
+    const t = document.querySelector('#tekst').value;
+    console.log(t);
+    const k = document.querySelector('#dugme').value;
+    console.log(k);
+
+    if(cb1.checked){
+      console.log("kec")
+      let tt = 'Ocjena predavanja je 1'
+      let a = {
+        kljuc: tt,
+        tekst: t
+      };
+
+      $.post('/publika/rating/'+k, a);
+    }
+
+    if(cb2.checked){
+      let tt = 'Ocjena predavanja je 2'
+      let a = {
+        kljuc: tt,
+        tekst: t
+      };
+      $.post('/publika/rating/'+k, a);
+    }
+
+    if(cb3.checked){
+      let tt = 'Ocjena predavanja je 3'
+      let a = {
+        kljuc: tt,
+        tekst: t
+      };
+      $.post('/publika/rating/'+k, a);
+    }
+
+    if(cb4.checked){
+      let tt = 'Ocjena predavanja je 4'
+      let a = {
+        kljuc: tt,
+        tekst: t
+      };
+      $.post('/publika/rating/'+k, a);
+    }
+
+    if(cb5.checked){
+      let tt = 'Ocjena predavanja je 5'
+      let a = {
+        kljuc: tt,
+        tekst: t
+      };
+
+      $.post('/publika/rating/'+k, a);
+    }
+    widget.style.display = "none";
+    post.style.display = "block";
+    editBtn.onclick = ()=>{
+      widget.style.display = "block";
+      post.style.display = "none";
+    }
+    return false;
+  }
+  function rating(kodPred){
+    console.log('rejting');
+    const cb1 = document.querySelector('#rate-1');
+    const cb2= document.querySelector('#rate-2');
+    const cb3 = document.querySelector('#rate-3');
+    const cb4 = document.querySelector('#rate-4');
+    const cb5 = document.querySelector('#rate-5');
+    const t = document.querySelector('#tekst').value;
+    console.log(t);
+
+    if(cb1.checked){
+      let tt = 'Ocjena predavanja je 1'
+      let a = {
+        kljuc: tt,
+        tekst: t
+      };
+      $.post('/publika/rating/'+kodPred, a);
+    }
+
+    if(cb2.checked){
+      let tt = 'Ocjena predavanja je 2'
+      let a = {
+        kljuc: tt,
+        tekst: t
+      };
+      $.post('/publika/rating/'+kodPred, a);
+    }
+
+    if(cb3.checked){
+      let tt = 'Ocjena predavanja je 3'
+      let a = {
+        kljuc: tt,
+        tekst: t
+      };
+      $.post('/publika/rating/'+kodPred, a);
+    }
+
+    if(cb4.checked){
+      let tt = 'Ocjena predavanja je 4'
+      let a = {
+        kljuc: tt,
+        tekst: t
+      };
+      $.post('/publika/rating/'+kodPred, a);
+    }
+
+    if(cb5.checked){
+      let tt = 'Ocjena predavanja je 5'
+      let a = {
+        kljuc: tt,
+        tekst: t
+      };
+
+      $.post('/publika/rating/'+kodPred, a);
+    }
+
+  }
+</script>
+
+
+
+
+
+
+
+
+
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.11.0/qs.js" integrity="sha512-QXQgo/rJDUE26PrRHxhISwratdyZi9e/zvnlv72Mk6W3lmTa5YiiVaR9cYxNRjQIZXzAShwslz6rkOttv90g6g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qs/6.11.0/qs.min.js" integrity="sha512-/l6vieC+YxaZywUhmqs++8uF9DeMvJE61ua5g+UK0TuHZ4TkTgB1Gm1n0NiA86uEOM9JJ6JUwyR0hboKO0fCng==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+<script src="/socket.io/socket.io.js"></script>
+
+
+
+<script>
+  const chatForm = document.getElementById('chat-form')
+  const chatMessages = document.querySelector('.chat-messages');
+  // Get username and room from URL
+  const { username, room } = Qs.parse(location.search, {
+    ignoreQueryPrefix: true,
+  });
+  const roomName = document.getElementById('room-name');
+  const userList = document.getElementById('users');
+  let array = [];
+
+  const socket = io();
+
+  // Join chatroom
+  socket.emit('joinRoom', {username, room});
+
+
+  // Get room and users
+  socket.on('roomUsers', ({room, users}) =>{
+    outputRoomName(room);
+    outputUsers(users);
+  });
+
+  // Message from server
+  socket.on('message', (message) =>{
+    console.log('poruka: ',message);
+        let l = document.querySelector('#lista').value;
+        let lista_zabranjenih = [];
+        let ID = document.querySelector('#id').value;
+
+        console.log(l.split.length)
+        lista_zabranjenih = l.split(',');
+        let rijec = false;
+        for(let i=0;i<lista_zabranjenih.length;i++){
+          if(message.text == lista_zabranjenih[i]){
+            rijec = true;
+            $.post('/publika/sakrijPoruku/' + lista_zabranjenih[i] + '/' + ID);
+            break;
+          }
+        }
+        if(!rijec){
+          outputMessage(message);
+        }
+
+
+
+
+    // Scroll down
+    chatMessages.scrollTop = chatMessages.scrollHeight;
+  });
+
+  // Message submit
+  chatForm.addEventListener('submit', (e) =>{
+    e.preventDefault();
+    // Get message text
+    const msg = e.target.elements.msg.value;
+    // Emit message to server
+    socket.emit( 'chatMessage',msg);
+    // Clear input
+    e.target.elements.msg.value = '';
+    e.target.elements.msg.focus();
+
+  });
+
+
+  // Output message to DOM
+
+
+  function outputMessage(message) {
+    const div = document.createElement('div');
+    console.log("usernameee", message.username);
+    console.log("Poruka je -> ", message.text);
+    array.push(message.text);
+
+
+    div.classList.add('message');
+    div.innerHTML = `
+        <p class="meta">Anonymous <span>${message.time}</span></p>
+        <p class="text">
+          ${message.text}
+           <button  class="fa fa-thumbs-up a"
+                data-post-id="" style="float: right;font-size: 16px; color:var(--dark-color-a); "
+                value="${message.text}">Like
+        </button>
+    </p>`;
+    document.querySelector('.chat-messages').appendChild(div);
+
+    $(".a").click(function (){
+      console.log("kliknut");
+      console.log(this.value);
+      console.log(array);
+      lajkajNovo(array, this.value);
+    });
+
+
+
+
+    const p = document.getElementById('paragraph');
+    const p2= document.getElementById('paragraph2');
+    console.log(p);
+    var actOnPost = function (event) {
+      console.log('lajkanje');
+      var postId = event.target.dataset.postId;
+      var action = event.target.textContent.trim();
+      toggleButtonText[action](event.target);
+      updatePostStats[action](postId);
+      if(lajk){
+        $.post('/publika/lajk/'+postId, postId);
+      }else if(!lajk){
+        $.post('/publika/unlajk/'+postId, postId);
+      }
+    };
+
+
+
+    message = {
+      text: message.text,
+      time: message.time,
+      kljuc: p.textContent,
+      kljuc2 : p2.textContent
+    }
+    console.log(message);
+
+
+    $.post('/publika/novaPoruka', message);
+
+
+
+  }
+</script>
+
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+<script>
+  function lajkajNovo(niz,n){
+    console.log("niz je", niz);
+    console.log("poruka je", n);
+  }
+
+  let lajk = false;
+  let unlajk = false;
+  var updatePostStats = {
+    Like: function (postId) {
+      document.querySelector('#likes-count-' + postId).textContent++;
+    },
+    Unlike: function(postId) {
+      document.querySelector('#likes-count-' + postId).textContent--;
+    }
+  };
+
+  var toggleButtonText = {
+    Like: function(button) {
+      button.textContent = "Unlike";
+      lajk = true;
+      unlajk = false;
+    },
+    Unlike: function(button) {
+      button.textContent = "Like";
+      lajk = false;
+      unlajk = true;
+    }
+  };
+
+
+
+  function lajkanje(id) {
+    console.log('lajkanje');
+    console.log(id);
+    console.log(a);
+    console.log(event);
+    var postId = event.target.dataset.postId;
+    var action = event.target.textContent.trim();
+    toggleButtonText[action](event.target);
+    updatePostStats[action](postId);
+    if(lajk){
+      $.post('/publika/lajk/'+postId, postId);
+    }else if(!lajk){
+      $.post('/publika/unlajk/'+postId, postId);
+    }
+  };
+
+
+  var actOnPost = function lajkanje(event) {
+    console.log('lajkanje');
+    var postId = event.target.dataset.postId;
+    var action = event.target.textContent.trim();
+    toggleButtonText[action](event.target);
+    updatePostStats[action](postId);
+    if(lajk){
+      $.post('/publika/lajk/'+postId, postId);
+    }else if(!lajk){
+      $.post('/publika/unlajk/'+postId, postId);
+    }
+  };
+
+</script>
+</body>
+</html>

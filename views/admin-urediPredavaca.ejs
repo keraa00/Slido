@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>admin-urediPredavaca</title>
+    <link rel='stylesheet' href='/stylesheets/admin-urediPredavaca.css' />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+  </head>
+  <body>
+  <style>
+    .navigacija {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    li {
+      float: left;
+    }
+
+    .navigacija li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+    /* Change the link color to #111 (black) on hover */
+    .navigacija li a:hover {
+      background-color: #111;
+      text-decoration: none;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      background: var(--light-color);
+      margin: 00px;
+    }
+
+  </style>
+
+  <ul class="navigacija">
+    <li><a class="active" href="http://localhost:3000">Home</a></li>
+    <li><a href="/admin/login">Admin</a></li>
+    <li><a href="/predavac">Predavac</a></li>
+    <li><a href="/publika">Publika</a></li>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li style="margin-right: 15px"><a href="/admin/logout"><span class="glyphicon glyphicon-user"></span> Log Out</a></li>
+    </ul>
+  </ul>
+
+
+  <div class="uredi">
+    <form id="login-forma" action="/admin/urediP" method="POST">
+      <h3 id="forma-naslov">Uredite podatke</h3>
+      <% for(let i=0; i<predavac.length; i++) { %>
+        <br>
+        <div class="form-group">
+          <input type="text" class="form-control" id="tekst" name="ime" value="<%= predavac[i].ime %>" >
+        </div>
+        <br>
+        <div class="form-group">
+          <input type="text" class="form-control" id="tekst" name="prezime" value="<%=predavac[i].prezime%>"
+        </div>
+        <br>
+
+        <input hidden="hidden" name="idPredavaca" value="<%= predavac[i].predavac_id%>">
+        <button type="submit" class="btn btn-dark" id="dugme">Spasi</button>
+      <% } %>
+    </form>
+  </div>
+
+  </body>
+
+
+</html>

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= title %></title>
+    <link rel='stylesheet' href='/stylesheets/predavac.css' />
+    <!-- Latest compiled and minified CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+    <!-- jQuery library -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <!-- Latest compiled JavaScript -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.2.1/css/all.min.css" integrity="sha512-MV7K8+y+gLIBoVD59lQIYicR65iaqukzvf/nwasF0nqhPay5w/9lJmVM2hMDcnK1OnMGCdVK+iQrJ7lzPJQd1w==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+
+  </head>
+  <body>
+  <style>
+    .navigacija {
+      list-style-type: none;
+      margin: 0;
+      padding: 0;
+      overflow: hidden;
+      background-color: #333;
+    }
+
+    li {
+      float: left;
+    }
+
+    .navigacija li a {
+      display: block;
+      color: white;
+      text-align: center;
+      padding: 14px 16px;
+      text-decoration: none;
+    }
+
+
+    .navigacija li a:hover {
+      background-color: #111;
+      text-decoration: none;
+    }
+    body {
+      font-family: 'Roboto', sans-serif;
+      font-size: 16px;
+      background: var(--light-color);
+      margin: 00px;
+    }
+
+  </style>
+
+  <ul class="navigacija">
+    <li><a class="active" href="http://localhost:3000">Home</a></li>
+    <li><a href="/admin">Admin</a></li>
+    <li><a href="/predavac">Predavac</a></li>
+    <li><a href="/publika">Publika</a></li>
+
+    <ul class="nav navbar-nav navbar-right">
+      <li><a href="/predavac/registracija"><span class="glyphicon glyphicon-user"></span> Sign Up</a></li>
+      <li><a href="/predavac/login"><span class="glyphicon glyphicon-log-in"></span> Login</a></li>
+      <i id="check" class="fas fa-moon" style="font-size: 35px; color:white;margin-right:25px;margin-top:7px; cursor: pointer" onclick="changeStatus()"></i>
+
+    </ul>
+  </ul>
+
+
+  <div class="title">
+    <div class="text1">
+      Welcome To PREDAVAC
+    </div>
+    <div class="text2">
+      <div class="dropdown-content ulaz">
+
+        <a href="/predavac/login" class="ulaz"><i class="fa-solid fa-circle-arrow-right"></i>Log In</a>
+        <a href="/predavac/registracija" class="ulaz"><i class="fa-solid fa-circle-arrow-right"></i>Registracija</a>
+
+      </div>
+    </div>
+
+  </div>
+  <script>
+
+
+      const check =document.getElementById("check")
+
+
+      if (localStorage.getItem('darkMode')===null){
+        localStorage.setItem('darkMode', "false");
+      }
+      const link = document.createElement('link');
+      link.rel = 'stylesheet';
+      document.getElementsByTagName('HEAD')[0].appendChild(link);
+
+
+      checkStatus()
+      function checkStatus(){
+        if (localStorage.getItem('darkMode')==="true"){
+          check.checked = true;
+          link.href = './stylesheets/dark.css';
+        }else{
+          check.checked = false;
+          link.href = '';
+        }
+      }
+
+      function changeStatus(){
+
+
+        if (localStorage.getItem('darkMode')==="true"){
+          localStorage.setItem('darkMode', "false");
+          link.href = '';
+        } else{
+          localStorage.setItem('darkMode', "true");
+          link.href = './stylesheets/dark.css';
+        }
+      }
+
+
+
+
+  </script>
+
+
+  </body>
+</html>
